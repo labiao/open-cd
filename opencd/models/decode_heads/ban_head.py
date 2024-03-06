@@ -30,11 +30,11 @@ class BitemporalAdapterBranch(nn.Module):
             self,
             clip_channels: int = 768,
             fusion_index: list = [0, 1, 2],
-            side_enc_cfg: ConfigType = ...,
+            side_enc_cfg: ConfigType = ..., # 参数赋了个缺省值Ellipsis
     ):
         super().__init__()
 
-        self.side_encoder = MODELS.build(side_enc_cfg)
+        self.side_encoder = MODELS.build(side_enc_cfg)  # 注册双向分支的encoder部分
         self.encoder_type = side_enc_cfg.type
 
         clip_attns = []
@@ -193,8 +193,8 @@ class BitemporalAdapterHead(BaseDecodeHead):
 
         del self.conv_seg
 
-        self.side_adapter_network = BitemporalAdapterBranch(**ban_cfg)
-        self.mask_decoder = MODELS.build(ban_dec_cfg)
+        self.side_adapter_network = BitemporalAdapterBranch(**ban_cfg)  # 字典传参
+        self.mask_decoder = MODELS.build(ban_dec_cfg)  # 注册分类头
 
     def init_weights(self):
         self.side_adapter_network.init_weights()
